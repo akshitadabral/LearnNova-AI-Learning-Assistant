@@ -12,30 +12,36 @@ const generateToken = (id) => {
 //@desc Register new user
 //@route POST/api/auth/register
 //@access Public
-
 export const register = async (req, res, next) => {
     try {
         const { username, email, password } = req.body;
-        // Check if user exists
-        const userExists = await User.findOne({ $or: [{ email }] });
-        if (userExists) {
+
+        const existingEmail = await User.findOne({ email });
+        if (existingEmail) {
             return res.status(400).json({
                 success: false,
-                error:
-                    userExists.email === email
-                        ? "Email already registered"
-                        : "Username already taken",
+                error: "Email is already registered.",
                 statusCode: 400,
             });
         }
-        // Create user
+
+        const existingUsername = await User.findOne({ username });
+        if (existingUsername) {
+            return res.status(400).json({
+                success: false,
+                error: "Username is already taken.",
+                statusCode: 400,
+            });
+        }
+
         const user = await User.create({
             username,
             email,
             password,
         });
-        // Generate token
+
         const token = generateToken(user._id);
+
         res.status(201).json({
             success: true,
             data: {
@@ -52,9 +58,17 @@ export const register = async (req, res, next) => {
             message: "User registered successfully",
         });
     } catch (error) {
+        if (error.code === 11000) {
+            const field = Object.keys(error.keyPattern)[0];
+            return res.status(400).json({
+                success: false,
+                error: `${field.charAt(0).toUpperCase() + field.slice(1)} is already in use.`,
+                statusCode: 400,
+            });
+        }
         next(error);
     }
-};
+}
 
 
 // @desc Login user

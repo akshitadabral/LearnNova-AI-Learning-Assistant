@@ -29,10 +29,12 @@ const RegisterPage = () => {
       await authService.register(username,email, password);
       toast.success('Registration successfull! Please Login');
       navigate('/login');
-    } catch (err) {
-      setError(err.message || 'Failed to register. Please try again.');
-      toast.error(err.message || 'Failed to registe.');
-    } finally {
+    } catch(err){
+    const msg=err.error||err.message||"Failed to register.";
+
+    setError(msg);
+    toast.error(msg);
+} finally {
       setLoading(false);
     }
   };
