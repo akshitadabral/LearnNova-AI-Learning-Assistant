@@ -1,4 +1,4 @@
-import {useEffect,useState} from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import {
     BarChart,
@@ -12,48 +12,48 @@ import {
     CartesianGrid
 } from "recharts";
 
-const SearchAnalytics=()=>{
+const SearchAnalytics = () => {
 
-    const [analytics,setAnalytics]=useState(null);
-    const [loading,setLoading]=useState(true);
+    const [analytics, setAnalytics] = useState(null);
+    const [loading, setLoading] = useState(true);
 
-    const fetchAnalytics=async()=>{
+    const fetchAnalytics = async () => {
 
-        try{
+        try {
 
-            const response=await axios.get(
-                "/api/searchanalytics/search",
+            const response = await axios.get(
+                "/api/search-analytics",
                 {
-                    headers:{
-                        Authorization:`Bearer ${localStorage.getItem("token")}`
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("token")}`
                     }
                 }
             );
 
-            console.log("API RESPONSE:",response.data);
+            console.log("API RESPONSE:", response.data);
             setAnalytics(response.data.data);
 
-        }catch(error){
-            console.log("API ERROR:",error);
-        }finally{
+        } catch (error) {
+            console.log("API ERROR:", error);
+        } finally {
             setLoading(false);
         }
 
     };
 
-    useEffect(()=>{
+    useEffect(() => {
         fetchAnalytics();
-    },[]);
+    }, []);
 
-    if(loading){
+    if (loading) {
         return <p className="p-8 text-slate-500">Loading analytics...</p>;
     }
 
-    if(!analytics){
+    if (!analytics) {
         return <p className="p-8 text-slate-500">No analytics data found</p>;
     }
 
-    return(
+    return (
         <div className="p-8 bg-slate-50 min-h-screen">
 
             <h1 className="text-4xl font-bold text-slate-900 mb-2">
@@ -97,10 +97,10 @@ const SearchAnalytics=()=>{
                 <div className="w-full h-[300px]">
                     <ResponsiveContainer width="100%" height="100%">
                         <BarChart data={analytics.topKeywords || []}>
-                            <XAxis dataKey="_id"/>
-                            <YAxis/>
-                            <Tooltip/>
-                            <Bar dataKey="count" fill="#10b981" radius={[8,8,0,0]}/>
+                            <XAxis dataKey="_id" />
+                            <YAxis />
+                            <Tooltip />
+                            <Bar dataKey="count" fill="#10b981" radius={[8, 8, 0, 0]} />
                         </BarChart>
                     </ResponsiveContainer>
                 </div>
@@ -116,11 +116,11 @@ const SearchAnalytics=()=>{
                 <div className="w-full h-[300px]">
                     <ResponsiveContainer width="100%" height="100%">
                         <LineChart data={analytics.searchesPerDay || []}>
-                            <CartesianGrid strokeDasharray="3 3"/>
-                            <XAxis dataKey="_id"/>
-                            <YAxis/>
-                            <Tooltip/>
-                            <Line type="monotone" dataKey="count" stroke="#10b981" strokeWidth={3}/>
+                            <CartesianGrid strokeDasharray="3 3" />
+                            <XAxis dataKey="_id" />
+                            <YAxis />
+                            <Tooltip />
+                            <Line type="monotone" dataKey="count" stroke="#10b981" strokeWidth={3} />
                         </LineChart>
                     </ResponsiveContainer>
                 </div>

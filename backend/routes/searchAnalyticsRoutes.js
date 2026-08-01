@@ -4,6 +4,6 @@ import protect from "../middleware/auth.js";
 
 const router=express.Router();
 
-router.get("/search",protect,getSearchAnalytics);
+router.get("/", protect, getSearchAnalytics);
 
 export default router;

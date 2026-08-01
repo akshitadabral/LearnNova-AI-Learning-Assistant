@@ -59,7 +59,7 @@ app.use('/api/quizzes',quizRoutes);
 app.use('/api/progress',progressRoutes);
 app.use("/api/analytics", analyticsRoutes);
 app.use("/api/search", searchRoutes);
-app.use("/api/searchanalytics",searchAnalyticsRoutes);
+app.use("/api/search-analytics",searchAnalyticsRoutes);
 
 
 app.use(errorHandler);
