@@ -6,6 +6,13 @@ all within a single platform.
 
 ---
 
+## Live Demo 
+
+
+Experience LearnNova here:
+
+https://learnnova-frontend.onrender.com
+
 ## Overview
 
 LearnNova was developed to simplify studying by integrating document management with Generative AI. Instead of manually reading lengthy PDFs and preparing revision material, users can interact with their documents through AI-powered summaries, concept explanations, flashcards, quizzes, and contextual chat.
