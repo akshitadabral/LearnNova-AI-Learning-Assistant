@@ -11,7 +11,7 @@ import mongoose from 'mongoose';
 // @access Private
 export const uploadDocument = async (req, res, next) => {
     try {
-        if (!req. file) {
+        if (!req.file) {
             return res.status(400).json({
                 success: false,
                 error: 'Please upload a PDF file',
@@ -19,7 +19,7 @@ export const uploadDocument = async (req, res, next) => {
             });
         }
         const { title } = req.body;
-        if (!title){
+        if (!title) {
             // Delete uploaded file if no title provided
             await fs.unlink(req.file.path);
             return res.status(400).json({
@@ -29,7 +29,7 @@ export const uploadDocument = async (req, res, next) => {
             });
         }
         // Construct the URL for the uploaded file
-        const baseUrl = `http://localhost:${process.env.PORT || 8000}`;
+        const baseUrl = process.env.BACKEND_URL || "https://learnnova-backend-kadk.onrender.com";
         const fileUrl = `${baseUrl}/uploads/documents/${req.file.filename}`;
 
         //Create document record
@@ -42,7 +42,7 @@ export const uploadDocument = async (req, res, next) => {
             status: 'processing'
         });
         // Process PDF in background (in production, use a queue like Bull)
-        processPDF(document ._id, req.file.path).catch(err => {
+        processPDF(document._id, req.file.path).catch(err => {
             console.error('PDF processing error:', err);
         });
         res.status(201).json({
@@ -50,10 +50,10 @@ export const uploadDocument = async (req, res, next) => {
             data: document,
             message: 'Document uploaded successfully. Processing in progress ...'
         });
-    }catch (error) {
+    } catch (error) {
         // Clean up file on error
         if (req.file) {
-            await fs.unlink(req.file.path).catch(() => {});
+            await fs.unlink(req.file.path).catch(() => { });
         }
         next(error);
     }
@@ -61,7 +61,7 @@ export const uploadDocument = async (req, res, next) => {
 
 // Helper function to process PDF
 const processPDF = async (documentId, filePath) => {
-    try{
+    try {
         const { text } = await extractTextFromPDF(filePath);
         // Create chunks
         const chunks = chunkText(text, 500, 50);
@@ -82,11 +82,11 @@ const processPDF = async (documentId, filePath) => {
 // @desc Get all user documents
 // @route GET /api/documents
 // @access Private
-export const getDocuments = async (req, res, next)=>{
+export const getDocuments = async (req, res, next) => {
     try {
-        const documents =await Document.aggregate([
+        const documents = await Document.aggregate([
             {
-                $match: { userId: new mongoose.Types.ObjectId(req.user ._id) }
+                $match: { userId: new mongoose.Types.ObjectId(req.user._id) }
             },
             {
                 $lookup: {
@@ -97,7 +97,7 @@ export const getDocuments = async (req, res, next)=>{
                 }
             },
             {
-                $lookup:{
+                $lookup: {
                     from: 'quizzes',
                     localField: '_id',
                     foreignField: 'documentId',
@@ -119,7 +119,7 @@ export const getDocuments = async (req, res, next)=>{
                 }
             },
             {
-                $sort: { uploadDate: -1}
+                $sort: { uploadDate: -1 }
             }
         ]);
         res.status(200).json({
@@ -135,11 +135,11 @@ export const getDocuments = async (req, res, next)=>{
 // @desc Get single document with chunks
 // @route GET /api/documents/:id
 // @access Private
-export const getDocument = async (req, res, next)=>{
+export const getDocument = async (req, res, next) => {
     try {
         const document = await Document.findOne({
             _id: req.params.id,
-            userId: req.user ._id
+            userId: req.user._id
         });
         if (!document) {
             return res.status(404).json({
@@ -151,7 +151,7 @@ export const getDocument = async (req, res, next)=>{
         // Get counts of associated flashcards and quizzes
         const flashcardCount = await Flashcard.countDocuments({ documentId: document._id, userId: req.user._id });
         const quizCount = await Quiz.countDocuments({ documentId: document._id, userId: req.user._id });
-        
+
         // Update last accessed
         document.lastAccessed = Date.now();
         await document.save();
@@ -159,12 +159,12 @@ export const getDocument = async (req, res, next)=>{
         const documentData = document.toObject();
         documentData.flashcardCount = flashcardCount;
         documentData.quizCount = quizCount;
-        
+
         res.status(200).json({
             success: true,
             data: documentData
         });
-    }catch (error) {
+    } catch (error) {
         next(error);
     }
 };
@@ -175,7 +175,7 @@ export const getDocument = async (req, res, next)=>{
 // @access Private
 export const deleteDocument = async (req, res, next) => {
     try {
-        const document = await Document. findOne({
+        const document = await Document.findOne({
             _id: req.params.id,
             userId: req.user._id
         });
@@ -187,14 +187,14 @@ export const deleteDocument = async (req, res, next) => {
             });
         }
         // Delete file from filesystem
-        await fs.unlink(document.filePath).catch(() => {});
+        await fs.unlink(document.filePath).catch(() => { });
         // Delete document
         await document.deleteOne();
         res.status(200).json({
             success: true,
             message: 'Document deleted successfully'
         });
-    }catch (error) {
+    } catch (error) {
         next(error);
     }
 };

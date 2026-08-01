@@ -47,7 +47,7 @@ const DocumentDetailPage = () => {
     }
 
     const baseUrl =
-      process.env.REACT_APP_API_URL || 'http://localhost:8000';
+      "https://learnnova-backend-kadk.onrender.com";
 
     return `${baseUrl}${filePath.startsWith('/') ? '' : '/'}${filePath}`;
   };
