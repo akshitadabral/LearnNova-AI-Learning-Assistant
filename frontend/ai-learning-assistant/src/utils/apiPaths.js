@@ -11,9 +11,9 @@ export const API_PATHS = {
     DOCUMENTS: {
         UPLOAD: "/api/documents/upload",
         GET_DOCUMENTS: "/api/documents",
-        GET_DOCUMENT_BY_ID: (id) =>`/api/documents/${id}`,
+        GET_DOCUMENT_BY_ID: (id) => `/api/documents/${id}`,
         UPDATE_DOCUMENT: (id) => `/api/documents/${id}`,
-        DELETE_DOCUMENT: (id) =>`/api/documents/${id}`,
+        DELETE_DOCUMENT: (id) => `/api/documents/${id}`,
     },
     AI: {
         GENERATE_FLASHCARDS: "/api/ai/generate-flashcards",
@@ -25,22 +25,24 @@ export const API_PATHS = {
     },
     FLASHCARDS: {
         GET_ALL_FLASHCARD_SETS: "/api/flashcards",
-        GET_FLASHCARDS_FOR_DOC: (documentId)=> `/api/flashcards/${documentId}`,
+        GET_FLASHCARDS_FOR_DOC: (documentId) => `/api/flashcards/${documentId}`,
         REVIEW_FLASHCARD: (cardId) => `/api/flashcards/${cardId}/review`,
         TOGGLE_STAR: (cardId) => `/api/flashcards/${cardId}/star`,
-        DELETE_FLASHCARD_SET: (id) =>`/api/flashcards/${id}`,
+        DELETE_FLASHCARD_SET: (id) => `/api/flashcards/${id}`,
     },
     QUIZZES: {
         GET_QUIZZES_FOR_DOC: (documentId) => `/api/quizzes/${documentId}`,
         GET_QUIZ_BY_ID: (id) => `/api/quizzes/quiz/${id}`,
-        SUBMIT_QUIZ: (id) =>`/api/quizzes/${id}/submit`,
-        GET_QUIZ_RESULTS: (id) =>`/api/quizzes/${id}/results`,
-        DELETE_QUIZ: (id) =>`/api/quizzes/${id}`,
+        SUBMIT_QUIZ: (id) => `/api/quizzes/${id}/submit`,
+        GET_QUIZ_RESULTS: (id) => `/api/quizzes/${id}/results`,
+        DELETE_QUIZ: (id) => `/api/quizzes/${id}`,
     },
 
     PROGRESS: {
         GET_DASHBOARD: "/api/progress/dashboard",
     },
+    SEARCH_ANALYTICS: {
+        GET_ANALYTICS: "/api/search-analytics",
+    },
 };
-    
-    
+

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import axiosInstance from "../../utils/axiosInstance"
+import { API_PATHS } from "../../utils/apiPaths";
 import {
     BarChart,
     Bar,
@@ -21,13 +22,8 @@ const SearchAnalytics = () => {
 
         try {
 
-            const response = await axios.get(
-                "/api/search-analytics",
-                {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem("token")}`
-                    }
-                }
+            const response = await axiosInstance.get(
+                API_PATHS.SEARCH_ANALYTICS.GET_ANALYTICS
             );
 
             console.log("API RESPONSE:", response.data);
